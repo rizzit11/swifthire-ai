@@ -2,7 +2,9 @@
 
 A Resume Parsing, Job Matching, and AI Interview Chatbot platform.
 
-## Day 1 Completed Tasks
+---
+
+## 📅 Day 1: Project Setup & Basics
 
 - **Git & GitHub**  
   - Initialized local repo (`git init`)  
@@ -16,50 +18,30 @@ A Resume Parsing, Job Matching, and AI Interview Chatbot platform.
   - Created Python virtual env (`env`) and activated it  
   - Installed FastAPI, Uvicorn, Motor  
   - Built `main.py` with:  
-    - `/` health‐check endpoint  
+    - `/` health-check endpoint  
     - `/db-health` to verify MongoDB connection  
 - **Project Structure**  
   - Split into `backend/` and `frontend/` folders  
-  - Moved all Python code into `backend/`  
   - Captured dependencies in `backend/requirements.txt`  
 - **Frontend (Next.js + Tailwind)**  
-  - Scaffolded Next.js app in `frontend/` using `create-next-app`  
+  - Scaffolded Next.js app in `frontend/` via `create-next-app`  
   - Installed Tailwind v4 via PostCSS plugin  
   - Configured `tailwind.config.js` and `postcss.config.js`  
   - Added `src/app/page.js` (Home) and `src/app/about/page.js`  
   - Updated `layout.js` with navbar links to Home & About  
   - Verified both `/` and `/about` routes  
 
-## Next Steps
-1. Add Architecture Overview  
-
-**Folder structure**  
-swifthire-ai/ ├─ backend/ FastAPI app + Dockerized MongoDB
-├─ frontend/ Next.js 15 (App Router) + Tailwind CSS
-└─ README.md This file
-
-**Tech stack**  
-- **Frontend:** Next.js, React, Tailwind CSS  
-- **Backend:** FastAPI, Python 3.13, Motor, Uvicorn  
-- **Database:** MongoDB (running in Docker)
-
-**Request flow**  
-1. **Client** (Next.js) → HTTP POST `/api/upload-resume`  
-2. **Server** (FastAPI) → parse & store in MongoDB  
-3. **Server** → generate embeddings / run matching  
-4. **Server** → respond with ranked candidates  
-5. **Client** → display results
-
+---
 
 ## 📅 Day 2: Backend Structure & MongoDB Integration
 
-**Goals:** Flesh out backend structure and MongoDB connection.
+**Goals:** Flesh out backend structure, connect to MongoDB.
 
-- Organized code under `backend/` with `main.py`, `chains.py`, `requirements.txt`
-- Confirmed `/` and `/db-health` return correct JSON and Mongo version
-- Startup event reads `MONGO_URI` env var, defaults to `mongodb://localhost:27017`
+- Organized code under `backend/` with `main.py`, `chains.py`, `requirements.txt`  
+- Confirmed `/` and `/db-health` return correct JSON and Mongo version  
+- Startup event reads `MONGO_URI` env var (default `mongodb://localhost:27017`)  
 
-
+---
 
 ## 📅 Day 3: AI Chain & Dockerization
 
@@ -67,48 +49,80 @@ swifthire-ai/ ├─ backend/ FastAPI app + Dockerized MongoDB
 
 ### LangChain Integration
 
-- Created `backend/chains.py` with `generate_questions()`
-- Initially used OpenAI → hit 429 quota → added static fallback in exception
-- Tried VertexAI (Gemini) → installed `langchain-google-vertexai`, updated imports
-- Met GCP errors (no billing) → stubbed chains to always return fallback list
+- Created `backend/chains.py` with `generate_questions()`  
+- Initially used OpenAI → hit 429 quota → added static fallback list  
+- Switched to VertexAI (Gemini) → installed `langchain-google-vertexai`, updated imports  
+- Stubbed chain to always return fallback list when GCP credentials weren’t available  
 
-### Docker Compose Setup
+### Docker & Compose
 
-- **`backend/Dockerfile`** (Python 3.13-slim, `COPY`, `pip install`, `CMD uvicorn`)
-- **`docker-compose.yml`**:
-  - `mongo`: official image, volume `mongo_data`
-  - `backend`: build context `backend/`, ports `8000:8000`, `env_file: .env`
-- Issues tackled:
-  - Removed stale `swifthire-mongo` container
-  - Created `.env` with `GOOGLE_API_KEY`, `MONGO_URI`
-  - Fixed “uvicorn not found” by installing in requirements or using `python -m uvicorn`
-  - Silenced the obsolete `version:` warning
-  - Managed long build times via caching
+- **`backend/Dockerfile`** (Python 3.13-slim, `COPY`, `pip install`, `CMD uvicorn`)  
+- **`docker-compose.yml`**  
+  - `mongo`: official image, volume `mongo_data`  
+  - `backend`: build context `backend/`, ports `8000:8000`, env_file `.env`  
+- Tackled common Docker issues: stale containers, PATH for uvicorn, Compose warnings, caching  
 
-### CORS Configuration
+### CORS
 
-- Enabled CORS in `main.py` for `http://localhost:3000`
+- Enabled CORS in `main.py` for `http://localhost:3000`  
 
-### Frontend “Generate Questions” UI
+---
 
-- Created `frontend/src/app/questions/page.js` (client component)
-- Added “Questions” link in `frontend/src/app/layout.js`
-- Handled “Failed to fetch” by ensuring CORS and correct endpoint
-- Verified end-to-end: UI → API → mock chain → UI renders list
+## 📅 Day 4: Frontend “Generate Questions” UI & End-to-End
 
+**Goals:** Build questions page in Next.js and wire up to `/generate-questions`.
 
-## 📁 Updated Folder Structure
-swifthire-ai/ 
-├─ backend/ FastAPI + LangChain (mock) + Dockerfile + chains.py + main.py 
-├─ frontend/ Next.js 15 (App Router) + Tailwind + src/app pages 
-├─ docker-compose.yml Compose for MongoDB & backend 
-├─ .env Environment vars (MONGO_URI, GOOGLE_API_KEY) 
-└─ README.md This file
+- Created `frontend/src/app/questions/page.js` as a client component  
+- Added “Questions” link in `frontend/src/app/layout.js`  
+- Built form to POST `{ job_description }` → `/generate-questions` → render list  
+- Handled “Failed to fetch” by fixing CORS and correct backend URL  
+- Verified full flow in Docker: Next.js UI → FastAPI API → mock chain → rendered questions  
 
-## 🔧 Day 4 Complete with 
+---
 
-- Docker Compose brings up MongoDB + FastAPI (mock chain)  
-- `/generate-questions` returns JSON array of 5 questions  
-- Questions UI in Next.js calls API and displays list  
+## 📅 Day 5 (Mar 16) – Schemas & JWT Auth
 
+**Design & Validation**  
+- Defined JSON-schema validators for three collections:  
+  - **resumes**: `name`, `email`, `phone`, `skills[]`, `education[]`, `experience[]`  
+  - **jobs**: `title`, `company`, `description`, `required_skills[]`, `location`  
+  - **users**: `username`, `email`, `hashed_password`  
+- Wrapped each `create_collection` in try/except to avoid “already exists”
 
+**JWT Authentication**  
+- Added `auth.py` with:  
+  - `SECRET_KEY` (from `.env`, fallback `"change-this-secret"`)  
+  - `bcrypt` password hashing & verification  
+  - `create_access_token()` issuing HS256 JWTs  
+- Built `/signup` and `/login` endpoints in `main.py`  
+- Tested end-to-end via `curl` → returned `access_token`
+
+**Environment & Docker**  
+- Extended `.env` with:  
+  ```dotenv
+  MONGO_URI=mongodb://mongo:27017/swift_hire_db
+  GOOGLE_API_KEY=…
+  SECRET_KEY=<your‐jwt‐secret>
+
+## Final Folder Structure (swifthire-ai/)
+├─ backend/
+|  ├─ .env
+│  ├─ Dockerfile
+│  ├─ main.py
+│  ├─ chains.py
+│  ├─ auth.py
+│  ├─ models.py
+│  └─ requirements.txt
+├─ frontend/
+│  └─ src/app/
+│     ├─ about/page.js
+|     ├─ generate-qustions/page.js
+|     ├─ login/page.js
+|     ├─ signup/page.js
+│     ├─ layout.js
+│     ├─ page.js
+│     ├─ about/page.js
+│     └─ questions/page.js
+├─ docker-compose.yml
+├─ .env.compose           ← MONGO_URI, GOOGLE_API_KEY, SECRET_KEY
+└─ README.md

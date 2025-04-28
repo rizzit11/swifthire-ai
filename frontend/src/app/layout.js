@@ -10,15 +10,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen flex flex-col">
         <nav className="p-4 bg-gray-100">
           <Link href="/" className="mr-4 text-blue-600">Home</Link>
           <Link href="/about" className="mr-4 text-blue-600">About</Link>
-          <Link href="/questions" className="text-blue-600">Questions</Link>
+          <Link href="/questions" className="mr-4 text-blue-600">Generate-Questions</Link>
+          <Link href="/signup" className="mr-4 text-blue-600">Signup</Link>
+          <Link href="/login" className="text-blue-600">Login</Link>
         </nav>
-        <main className="p-4">
-          {children}
-        </main>
+        <main className="flex-1 p-6">{children}</main>
       </body>
     </html>
   );

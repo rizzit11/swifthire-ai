@@ -13,6 +13,7 @@ asttokens==3.0.0
 async-lru==2.0.5
 attrs==25.3.0
 babel==2.17.0
+bcrypt==4.3.0
 beautifulsoup4==4.13.3
 bleach==6.2.0
 blinker==1.8.2
@@ -38,6 +39,8 @@ distro==1.9.0
 Django==5.1.1
 dnspython==2.7.0
 docstring_parser==0.16
+ecdsa==0.19.1
+email_validator==2.2.0
 emoji==2.14.1
 executing==2.2.0
 fastapi==0.115.12
@@ -131,6 +134,7 @@ overrides==7.7.0
 packaging==24.2
 pandocfilters==1.5.1
 parso==0.8.4
+passlib==1.7.4
 pexpect==4.9.0
 pillow==10.4.0
 platformdirs==4.3.6
@@ -143,7 +147,7 @@ psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pyarrow==19.0.1
-pyasn1==0.6.1
+pyasn1==0.4.8
 pyasn1_modules==0.4.1
 pycparser==2.22
 pydantic==2.9.2
@@ -159,6 +163,7 @@ pyparsing==3.2.0
 pyquery==2.0.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
+python-jose==3.4.0
 python-json-logger==3.3.0
 PyYAML==6.0.2
 pyzmq==26.3.0
