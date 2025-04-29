@@ -4,11 +4,13 @@ load_dotenv()
 import os
 from datetime import datetime
 from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import CollectionInvalid, OperationFailure
+from google.cloud import documentai_v1 as documentai
+from google.oauth2 import service_account
 
 from chains import generate_questions
 from models import Resume, Job, User
@@ -23,6 +25,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Set up credentials for Google Document AI
+credentials = service_account.Credentials.from_service_account_file(
+    "/app/swifthire-458117-50f3c5f19084.json"  # Replace with your credentials file path
+)
+client = documentai.DocumentProcessorServiceClient(credentials=credentials)
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -124,6 +132,35 @@ async def generate_questions_endpoint(req: QuestionRequest):
         raise HTTPException(status_code=500, detail=str(e))
     return {"questions": qs}
 
+
+# Document Upload and Parsing using Google Document AI
+@app.post("/upload-document")
+async def upload_document(file: UploadFile = File(...)):
+    file_location = f"uploaded_files/{file.filename}"
+
+    # Save the uploaded file to disk
+    with open(file_location, "wb") as f:
+        f.write(await file.read())
+
+    # Process the document using Google Document AI
+    with open(file_location, "rb") as document:
+        document_content = document.read()
+
+    # Specify the Document AI project and location
+    project_id = "swifthire-458117"
+    location = "us"  # or your respective location
+    processor_id = "8c649504b9e81d90"
+    name = f"projects/{project_id}/locations/{location}/processors/{processor_id}"
+
+    # Process the document using the Google Document AI API
+    document = documentai.types.Document.from_bytes(document_content)
+    response = client.process_document(name=name, raw_document=document)
+
+    # Extract text
+    extracted_text = response.document.text
+    return {"text": extracted_text}
+
+
 # Auth models
 class UserIn(BaseModel):
     username: str
@@ -137,6 +174,7 @@ class Token(BaseModel):
 class LoginIn(BaseModel):
     email: EmailStr
     password: str
+
 
 # Signup
 @app.post("/signup", response_model=Token)
@@ -153,6 +191,7 @@ async def signup(user: UserIn):
     })
     token = create_access_token({"sub":user.email})
     return {"access_token":token}
+
 
 # Login
 @app.post("/login", response_model=Token)

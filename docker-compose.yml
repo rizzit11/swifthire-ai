@@ -15,9 +15,9 @@ services:
     ports:
       - "8000:8000"
     env_file:
-    - .env.compose
-    # SECRET_KEY=w0BCTt8-BMbNmMTZbrK5xyR7IyEju8tlEt6EKkxtFxk
-    # MONGO_URI=mongodb://mongo:27017/swift_hire_db 
+      - .env.compose
+    volumes:
+      - ./swifthire-458117-50f3c5f19084.json:/app/swifthire-458117-50f3c5f19084.json  # Mount the credentials file
     depends_on:
       - mongo
 

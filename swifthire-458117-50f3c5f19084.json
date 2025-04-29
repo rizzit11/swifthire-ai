@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "swifthire-458117",
+  "private_key_id": "50f3c5f190848a3ba0969d69962daf19591cd201",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDUOjwUYyfH9y/n\ni5f4zZhVN25dKM/IkEPVtV/DwtFucbvysuSPJtDtXt9MJ+8b1m73T6k9HtvZ1ziy\nYTDKrLctDEPVUsP82DYEVwFDpyeuWHxHYyaxS+dpv8RUAR6t/jOSPgSl6zz4Un0j\nacREcqPFA9GAEAPeM+FhVNsKgvpkRdSe95d89wic050Zgz2BTYPFTxd4EqL5Skgw\niaBw9cVdqeiJM9IdmRqk1SUCzdfpIRZxujlxdriaR4IRJcD/S7GU1VdcBYoFPL4k\n4gNaU5VnByknkRl01BGLhA1aSCnehOpbrf9B6RNSVFkhT8Exf1l2khyMq6eH1kgi\nLEutZJr3AgMBAAECggEAKMoYigKUvsYvmt0llFhPkvFYcOdLKE0x/H0jrshe4E9T\nxE3FyA250iWN3WE/f6YzJa1V5b1sm+3Vo9MyQYH4otvcnb+Ok6Yqm6LtR0d1RPkU\nydOwuBrSm2yUG2EruF1HJDBvTERuL3wLOSc25cDy4Qbe2TI6zBZElyRsBRUvct3v\nU6XBaan62IbHDToC7vu7xMXm/9YGvFN1ZJfIqffk+xXkVAN7rkRQQYM1bJnJ0C5Q\nRFTw1pGhUtatuCVqPoH5KCDZiREg0v7GdI90VfyfhEw4+kzA+OAp2nMeGUgiOzPp\nCFixO4o8WdLOcMltvPVr1YhNeAzlCT3AWncekV2cwQKBgQDzr1ElYVZ85UJORzn7\nfNOwrFoun37PGA8Cp7OG6O4L642UXJuY0tpnNnSqackSaLtDqS1flsbk0XpvAten\nx1qxMesMzfBQ3mIXoehkkq17tu1OJI0GOb1O/fWX/4BVdA9zsAZVJQQIJAZfUzUC\nAIS9aclQkypmb86TwROOZ1KWCQKBgQDe8+/Vi1b2fRVCYhOZeKyo5Q5cFoD+//98\nAGX3rUCSSC9dKMcOaeGbVJ31w7cA+E5msA4/+LdPBODmNF54vhMnClfs3QxS1rRp\neNsI7DZem56qq8Agcup6zA2X+nsth4TnqpAjUekHhXh88XiCvXmTx2+3j+9jRqMc\nBt6CuyHo/wKBgDpOa4sXJDuUG25haoU7E+fFBXr8XLouloDbIYCZQUQG44RpOC2z\n3eAuTnHsB9lox83jr+CcUhCz8qiXNISHlbKqMASLTgH7g9sFuXY/BlWAqn01D606\nqYo6B8aLsug/cecLaih7R+CuxfuPDDLjbt9nbWzjGZUTEYmW/BfprwAJAoGAeWet\n9sOchDaSqAZOE+kxY/ru+dhLQBBYp8ZzwA34tm9WU01ML54aewH1zglYEtAjqSk/\naThfYUkPymtD8k3WkhDA1jt8ZXOC5FgqNc6iwJvPJ7LEuSa6ZknNMS/1eVJtXdV0\nDbehxDW66ZZ4AAF7PayBOhzHx3CEi1N2QQvzqDMCgYEAmFJlf51/d5giCR7ACWq3\nx9xG8FZ8uk7OvHvefnQDK1dKm+ZZ8y/HepBKMlrqDvcI7CsTdz3sLsFU6o3yTdcp\nKxxqcHdSNRnihI/KR7rLL+lA6WN7Ski82nj0h2AirRvrvhO2DxYjs26usR9niVHM\nacyE6qbYFJ3oCY2lywe9DKs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "swift-hire-resume-parser@swifthire-458117.iam.gserviceaccount.com",
+  "client_id": "101421057913462536309",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/swift-hire-resume-parser%40swifthire-458117.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
