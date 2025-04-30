@@ -9,8 +9,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import CollectionInvalid, OperationFailure
-from google.cloud import documentai_v1 as documentai
-from google.oauth2 import service_account
+# from google.cloud import documentai_v1 as documentai  # Commenting out Document AI import
+# from google.oauth2 import service_account  # Commenting out Document AI auth
+
+# Import PyPDF2 for PDF text extraction
+import PyPDF2  # Adding PyPDF2
 
 from chains import generate_questions
 from models import Resume, Job, User
@@ -26,11 +29,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Commented out Google Document AI setup
 # Set up credentials for Google Document AI
-credentials = service_account.Credentials.from_service_account_file(
-    "/app/swifthire-458117-50f3c5f19084.json"  # Replace with your credentials file path
-)
-client = documentai.DocumentProcessorServiceClient(credentials=credentials)
+# credentials = service_account.Credentials.from_service_account_file(
+#     "/app/swifthire-458117-50f3c5f19084.json"  # Replace with your credentials file path
+# )
+# client = documentai.DocumentProcessorServiceClient(credentials=credentials)
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -133,31 +137,53 @@ async def generate_questions_endpoint(req: QuestionRequest):
     return {"questions": qs}
 
 
-# Document Upload and Parsing using Google Document AI
+# ———————————————————————————
+# Upload document and extract text
+# ———————————————————————————
+
+# Function to extract text from PDF using PyPDF2
+def extract_text_from_pdf(pdf_path):
+    with open(pdf_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page_num in range(len(reader.pages)):
+            page = reader.pages[page_num]
+            text += page.extract_text()
+    return text
+
 @app.post("/upload-document")
 async def upload_document(file: UploadFile = File(...)):
     file_location = f"uploaded_files/{file.filename}"
+
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
     # Save the uploaded file to disk
     with open(file_location, "wb") as f:
         f.write(await file.read())
 
+    # Commented out: Google Document AI part
     # Process the document using Google Document AI
-    with open(file_location, "rb") as document:
-        document_content = document.read()
+    # with open(file_location, "rb") as document:
+    #     document_content = document.read()
+    #
+    # project_id = "swifthire-458117"
+    # location = "us"  # or your respective location
+    # processor_id = "8c649504b9e81d90"
+    # name = f"projects/{project_id}/locations/{location}/processors/{processor_id}"
+    #
+    # raw_document = documentai.types.RawDocument(content=document_content)
+    # request = documentai.types.ProcessRequest(
+    #     name=name,
+    #     raw_document=raw_document
+    # )
+    #
+    # response = client.process_document(request=request)
+    # extracted_text = response.document.text
 
-    # Specify the Document AI project and location
-    project_id = "swifthire-458117"
-    location = "us"  # or your respective location
-    processor_id = "8c649504b9e81d90"
-    name = f"projects/{project_id}/locations/{location}/processors/{processor_id}"
+    # Using PyPDF2 to extract text from PDF instead
+    extracted_text = extract_text_from_pdf(file_location)
 
-    # Process the document using the Google Document AI API
-    document = documentai.types.Document.from_bytes(document_content)
-    response = client.process_document(name=name, raw_document=document)
-
-    # Extract text
-    extracted_text = response.document.text
     return {"text": extracted_text}
 
 

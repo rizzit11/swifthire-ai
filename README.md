@@ -126,3 +126,42 @@ A Resume Parsing, Job Matching, and AI Interview Chatbot platform.
 ├─ docker-compose.yml
 ├─ .env.compose           ← MONGO_URI, GOOGLE_API_KEY, SECRET_KEY
 └─ README.md
+
+# Day 6: Document Upload & Parsing
+
+## Goals
+- Implement file upload functionality.
+- Parse documents using PyPDF2.
+
+## Document Upload Functionality
+
+### Upload Endpoint
+- Created `/upload-document` endpoint for uploading documents.
+- Saves uploaded files to the server's `uploaded_files/` directory.
+- Uses FastAPI's `UploadFile` to handle file uploads.
+
+## Document Parsing with PyPDF2
+
+### PyPDF2 Integration
+- For now, used **PyPDF2** as a replacement for Google Document AI for PDF parsing.
+- The document is parsed, and the extracted text is returned as a response.
+- The part of the code using Google Document AI was commented out for later use when billing is activated.
+
+### Code Snippet: 
+## PyPDF2 Parser : The document content is extracted using `PdfReader` and returned as text:
+
+<!-- ```python
+import PyPDF2
+
+def parse_pdf(file_location):
+    with open(file_location, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        text = ""
+        for page in reader.pages:
+            text += page.extract_text()
+    return text -->
+
+## Temporary Workaround: 
+Google Document AI was commented out, and PyPDF2 is used in its place for document parsing for testing purposes until billing for Google services is activated.
+
+
