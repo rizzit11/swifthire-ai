@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import CollectionInvalid, OperationFailure
+from parser import extract_resume_fields  # For structured resume parsing
+
 # from google.cloud import documentai_v1 as documentai  # Commenting out Document AI import
 # from google.oauth2 import service_account  # Commenting out Document AI auth
 
@@ -177,14 +179,17 @@ async def upload_document(file: UploadFile = File(...)):
     #     name=name,
     #     raw_document=raw_document
     # )
-    #
     # response = client.process_document(request=request)
     # extracted_text = response.document.text
 
     # Using PyPDF2 to extract text from PDF instead
+    
     extracted_text = extract_text_from_pdf(file_location)
-
-    return {"text": extracted_text}
+    # return {"text": extracted_text}
+    
+    # Parse structured fields
+    parsed_data = extract_resume_fields(extracted_text)
+    return parsed_data
 
 
 # Auth models

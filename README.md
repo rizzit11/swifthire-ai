@@ -165,3 +165,13 @@ def parse_pdf(file_location):
 Google Document AI was commented out, and PyPDF2 is used in its place for document parsing for testing purposes until billing for Google services is activated.
 
 
+## 📅 Day 7 (Mar 18) – Resume Parsing API
+
+**Goals:** Build document parsing, extract structured fields, and add error handling.
+
+- ✅ Integrated Google Document AI (commented out due to billing – ready for reactivation)
+- ✅ Implemented fallback using **PyPDF2** to extract text from PDF resumes
+- ✅ Parsed key fields: **Name**, **Email**, **Phone**, **Skills**, **Education**, **Experience**  by creating the parser.py file in backend folder
+- ✅ Endpoint `/upload-document` now returns structured JSON response
+- ✅ Enabled Swagger UI testing at `http://localhost:8000/docs` for easier frontend dev
+- ✅ Tested both via `curl` and browser-based Swagger
